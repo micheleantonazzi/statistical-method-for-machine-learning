@@ -42,7 +42,7 @@ setup(
     version=__version__,
     description="Project of Statistical Method for Machine Learning",
     long_description=long_description,
-    url="https://github.com/micheleantonazzi/bioinformatics-project",
+    url="https://github.com/micheleantonazzi/statistical-method-for-machine-learning",
     author="micheleantonazzi@gmail.com",
     author_email="micheleantonazzi",
     # Choose your license
@@ -56,6 +56,6 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     tests_require=test_deps,
     # Add here the package dependencies
-    install_requires=[],
+    install_requires=["kaggler"],
     extras_require=extras,
 )
