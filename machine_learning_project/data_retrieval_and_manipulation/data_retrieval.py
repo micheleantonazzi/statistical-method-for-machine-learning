@@ -2,6 +2,8 @@ import shutil
 import os
 
 import kaggle
+from termcolor import colored
+
 
 class DataRetrieval:
     def __init__(self):
@@ -14,15 +16,22 @@ class DataRetrieval:
         :return:
         """
 
-        kaggle.api.authenticate()
         path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dataset')
 
-        if not os.path.exists(path):
-            os.mkdir(path)
-        """
-        if not os.listdir(path):
-            kaggle.api.dataset_download_files(self._dataset_name, path=path, quiet=False, unzip=True)
-        """
+        """Verify if the dataset has been already downloaded"""
+        if os.path.exists(path) and len(os.listdir(path)) == 10:
+            print(colored('The dataset has been already downloaded', 'green'))
+            return
+
+        print(colored('Starting download the dataset', 'red'))
+
+        kaggle.api.authenticate()
+
+        if os.path.exists(path):
+            shutil.rmtree(path)
+
+        kaggle.api.dataset_download_files(self._dataset_name, path=path, quiet=False, unzip=True)
+
         entire_dataset = os.path.join(path, 'fruits-360')
 
         # Dictionary which contains only the images of the selected categories
@@ -37,12 +46,11 @@ class DataRetrieval:
         # Create the categories' folders and move the relative files
         for category, files in filtered_dataset.items():
             folder = os.path.join(path, category)
-            if not os.path.exists(folder):
-                os.mkdir(folder)
+            os.mkdir(folder)
             count = 0
             for file in files:
-                os.rename(file, os.path.join(folder, category + str(count)))
-                count++
+                os.rename(file, os.path.join(folder, category + str(count) + '.jpg'))
+                count += 1
 
         """Remove the zip file and the remaining dataset"""
         zip_file = os.path.join(path, 'fruits.zip')
@@ -52,6 +60,11 @@ class DataRetrieval:
         remaining_dataset = os.path.join(path, 'fruits-360')
         if os.path.exists(remaining_dataset):
             shutil.rmtree(remaining_dataset)
+
+        print(colored('Dataset downloaded', 'green'))
+
+
+
 
 
 
