@@ -17,7 +17,6 @@ class DataVisualization:
         for i in range(10):
             while True:
                 image, label = next(iterator)
-                print(image)
                 if label == i:
                     ax = plt.subplot(2, 5, i + 1)
                     plt.imshow(image.numpy().astype("uint8"))
