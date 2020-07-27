@@ -45,7 +45,7 @@ class DataRetrieval:
 
         for sub_path, sub_dirs, files in os.walk(entire_dataset):
             for category in self._categories:
-                if category in sub_path.lower() and 'pineapple' not in sub_path.lower():
+                if '/' + category + ' ' in sub_path.lower():
                     filtered_dataset[category].extend(map(lambda file: os.path.join(sub_path, file), files))
                     break
 
