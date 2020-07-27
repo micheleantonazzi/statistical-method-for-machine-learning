@@ -119,6 +119,9 @@ class DataRetrieval:
     def get_categories(self) -> List[str]:
         return self._categories
 
+    def get_n_categories(self) -> int:
+        return len(self._categories)
+
 
 
 
