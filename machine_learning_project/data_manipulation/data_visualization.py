@@ -3,6 +3,8 @@ import numpy
 from machine_learning_project.data_manipulation.data_retrieval import DataRetrieval
 import matplotlib.pyplot as plt
 
+from machine_learning_project.data_manipulation.preprocessing_pipelines import SIMPLEST_PIPELINE
+
 
 class DataVisualization:
     def __init__(self, data_retrieval: DataRetrieval):
@@ -10,7 +12,7 @@ class DataVisualization:
 
     def print_original_images(self):
         shuffled_indices = numpy.random.permutation(len(self._data_retrieval.get_labels()))
-        train_set, _ = self._data_retrieval.create_tensorflow_dataset(shuffled_indices, numpy.array([]))
+        train_set, _ = self._data_retrieval.create_tensorflow_dataset(shuffled_indices, numpy.array([]), SIMPLEST_PIPELINE())
         iterator = iter(train_set)
 
         plt.figure(figsize=(10, 7))

@@ -1,5 +1,6 @@
 import shutil
 import os
+from pyclbr import Function
 from typing import List, Dict
 
 import kaggle
@@ -90,7 +91,7 @@ class DataRetrieval:
         print(type(labels))
         return self._data
 
-    def create_tensorflow_dataset(self, train_set_indices: numpy.ndarray, test_set_indices: numpy.ndarray):
+    def create_tensorflow_dataset(self, train_set_indices: numpy.ndarray, test_set_indices: numpy.ndarray, map_function: Function):
         """
         Returns two tensorflow dataset optimized for images, each of them containing the images and the labels specified
         in the input parameters (also the order is respected)
@@ -98,21 +99,15 @@ class DataRetrieval:
         :param test_set_indices: the numpy array indices of the test set
         :return: a tuple with the tensorflow training and test datasets, optimized for images
         """
-        # Return a tuple which contains the image decoded and rescaled and the its label
-        load_image = lambda image_path, label: (
-                tf.image.resize(tf.image.decode_jpeg(tf.io.read_file(image_path), channels=3), [self._img_height, self._img_width]),
-                label
-            )
-
         train_set = tf.data.Dataset.from_generator(
             lambda: zip(self._data['images'][train_set_indices], self._data['labels'][train_set_indices]),
             (tf.string, tf.int8)
-        ).map(load_image, num_parallel_calls=AUTOTUNE)
+        ).map(map_function, num_parallel_calls=AUTOTUNE)
 
         test_set = tf.data.Dataset.from_generator(
             lambda: zip(self._data['images'][test_set_indices], self._data['labels'][test_set_indices]),
             (tf.string, tf.int8)
-        ).map(load_image, num_parallel_calls=AUTOTUNE)
+        ).map(map_function, num_parallel_calls=AUTOTUNE)
 
         return train_set, test_set
 
