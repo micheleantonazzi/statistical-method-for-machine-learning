@@ -45,7 +45,7 @@ class DataRetrieval:
 
         for sub_path, sub_dirs, files in os.walk(entire_dataset):
             for category in self._categories:
-                if category in sub_path.lower():
+                if category in sub_path.lower() and 'pineapple' not in sub_path.lower():
                     filtered_dataset[category].extend(map(lambda file: os.path.join(sub_path, file), files))
                     break
 
@@ -88,7 +88,6 @@ class DataRetrieval:
         images_path = numpy.array(images_path)
         labels = numpy.array(labels)
         self._data = {'images': images_path, 'labels': labels}
-        print(type(labels))
         return self._data
 
     def create_tensorflow_dataset(self, train_set_indices: numpy.ndarray, test_set_indices: numpy.ndarray, map_function: Function):
