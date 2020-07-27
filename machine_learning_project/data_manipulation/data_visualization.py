@@ -27,3 +27,14 @@ class DataVisualization:
                     break
         plt.show()
 
+    def plot_samples_number(self):
+        plt.bar(
+            numpy.arange(self._data_retrieval.get_n_categories()),
+            [numpy.count_nonzero(self._data_retrieval.get_labels() == i) for i in range(self._data_retrieval.get_n_categories())],
+            color='royalblue'
+        )
+        plt.xticks(numpy.arange(self._data_retrieval.get_n_categories()), self._data_retrieval.get_categories())
+        plt.xlabel('N. of samples', fontsize=16)
+        plt.ylabel('Categories', fontsize=16)
+        plt.show()
+
