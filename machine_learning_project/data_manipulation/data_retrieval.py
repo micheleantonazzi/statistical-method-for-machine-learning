@@ -3,19 +3,20 @@ import os
 from typing import List, Dict
 
 import kaggle
+from tensorflow.python.data.ops.dataset_ops import AUTOTUNE
 from termcolor import colored
 import numpy
+import tensorflow as tf
 
 
 class DataRetrieval:
-    def __init__(self):
+    def __init__(self, img_width: int = -1, img_height: int = -1):
         self._dataset_name: str = 'moltean/fruits'
         self._categories: List[str] = ['apple', 'banana', 'plum', 'pepper', 'cherry', 'grape', 'tomato', 'potato', 'pear', 'peach']
         self._data_dir: os.path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dataset')
-        self._data: Dict[str, numpy.array] = {'data': None, 'labels': None}
-
-    def collect_data(self):
-        pass
+        self._data: Dict[str, numpy.ndarray] = {'images': numpy.array([]), 'labels': numpy.array([])}
+        self._img_width = img_width
+        self._img_height = img_height
 
     def download_data(self):
         """
@@ -67,7 +68,12 @@ class DataRetrieval:
 
         print(colored('Dataset downloaded', 'green'))
 
-    def load_dataset(self) -> Dict[str, numpy.array]:
+    def load_dataset(self) -> Dict[str, numpy.ndarray]:
+        """
+        This method create two numpy array: the first contains the images' paths and the latter contains the their labels
+        :return: Dict[str, numpy.array], key 'images' -> numpy.ndarray of the images' paths
+                                        key 'labels' -> numpy.ndarray of labels
+        """
         images_path = []
         labels = []
         current_label = 0
@@ -80,8 +86,47 @@ class DataRetrieval:
 
         images_path = numpy.array(images_path)
         labels = numpy.array(labels)
-        self._data = {'data': images_path, 'labels': labels}
+        self._data = {'images': images_path, 'labels': labels}
+        print(type(labels))
         return self._data
+
+    def create_tensorflow_dataset(self, train_set_indices: numpy.ndarray, test_set_indices: numpy.ndarray):
+        """
+        Returns two tensorflow dataset optimized for images, each of them containing the images and the labels specified
+        in the input parameters (also the order is respected)
+        :param train_set_indices: the numpy array indices of the training set
+        :param test_set_indices: the numpy array indices of the test set
+        :return: a tuple with the tensorflow training and test datasets, optimized for images
+        """
+        # Return a tuple which contains the image decoded and rescaled and the its label
+        load_image = lambda image_path, label: (
+                tf.image.resize(tf.image.decode_jpeg(tf.io.read_file(image_path), channels=3), [self._img_height, self._img_width]),
+                label
+            )
+
+        train_set = tf.data.Dataset.from_generator(
+            lambda: zip(self._data['images'][train_set_indices], self._data['labels'][train_set_indices]),
+            (tf.string, tf.int8)
+        ).map(load_image, num_parallel_calls=AUTOTUNE)
+
+        test_set = tf.data.Dataset.from_generator(
+            lambda: zip(self._data['images'][test_set_indices], self._data['labels'][test_set_indices]),
+            (tf.string, tf.int8)
+        ).map(load_image, num_parallel_calls=AUTOTUNE)
+
+        return train_set, test_set
+
+    def get_images_paths(self) -> numpy.ndarray:
+        return self._data['images']
+
+    def get_labels(self) -> numpy.ndarray:
+        return self._data['labels']
+
+    def get_categories(self) -> List[str]:
+        return self._categories
+
+
+
 
 
 
