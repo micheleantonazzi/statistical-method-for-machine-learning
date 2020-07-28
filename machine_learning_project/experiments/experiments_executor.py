@@ -3,6 +3,7 @@ from tensorflow.python.data.ops.dataset_ops import AUTOTUNE
 from tqdm import tqdm
 
 from machine_learning_project.data_manipulation.data_retrieval import DataRetrieval
+from machine_learning_project.experiments.results import save_results
 from machine_learning_project.models.models_functions import MODELS_FUNCTIONS
 import pandas
 from sanitize_ml_labels import sanitize_ml_labels
@@ -33,14 +34,16 @@ class ExperimentsExecutor:
             train_set, test_set = self._data.create_tensorflow_dataset(train_index, test_index, self._preprocessing_pipeline)
 
             # Optimize train a test sets for improve performances
-            train_set = train_set.cache().batch(batch_size=256).prefetch(buffer_size=AUTOTUNE)
-            test_set = test_set.cache().batch(batch_size=256).prefetch(buffer_size=AUTOTUNE)
+
 
             for model_name, model_function in MODELS_FUNCTIONS.items():
+                train_set_opt = train_set.cache().batch(batch_size=256).prefetch(buffer_size=AUTOTUNE)
+                test_set_opt = test_set.cache().batch(batch_size=256).prefetch(buffer_size=AUTOTUNE)
+
                 model_results = []
 
                 model = model_function()
-                history = model.fit(train_set, validation_data=test_set, epochs=30).history
+                history = model.fit(train_set_opt, validation_data=test_set_opt, epochs=20, batch_size=8).history
 
                 # Take the metrics of last epoch both for training and test
                 scores = pandas.DataFrame(history).iloc[-1].to_dict()
@@ -65,6 +68,7 @@ class ExperimentsExecutor:
                     }
                 })
 
+                save_results(model_results, self._preprocessing_pipeline.__name__, i, model_name)
                 results = results + model_results
 
 

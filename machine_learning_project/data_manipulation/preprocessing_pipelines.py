@@ -16,7 +16,10 @@ def SCALE_PIPELINE(img_width, img_height):
     between the interval of [0, 1]
     """
     normalization = Rescaling(1./255)
-    return lambda image_path, label: (
-        normalization(tf.image.resize(tf.image.decode_jpeg(tf.io.read_file(image_path), channels=3), [img_height, img_width])),
-        label
-    )
+    def scale_pipeline(image_path, label):
+        return (
+            normalization(tf.image.resize(tf.image.decode_jpeg(tf.io.read_file(image_path), channels=3), [img_height, img_width])),
+            label
+        )
+
+    return scale_pipeline
