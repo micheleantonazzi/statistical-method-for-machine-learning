@@ -4,6 +4,8 @@ from tqdm import tqdm
 
 from machine_learning_project.data_manipulation.data_retrieval import DataRetrieval
 from machine_learning_project.models.models_functions import MODELS_FUNCTIONS
+import pandas
+from sanitize_ml_labels import sanitize_ml_labels
 
 
 class ExperimentsExecutor:
@@ -26,6 +28,7 @@ class ExperimentsExecutor:
         images, labels = self._data.load_dataset()
         splits = StratifiedShuffleSplit(n_splits=self._holdouts, test_size=self._test_set_size, random_state=42)
 
+        results = []
         for i, (train_index, test_index) in tqdm(enumerate(splits.split(images, labels)), total=self._holdouts, desc="Computing holdouts", dynamic_ncols=True):
             train_set, test_set = self._data.create_tensorflow_dataset(train_index, test_index, self._preprocessing_pipeline)
 
@@ -34,6 +37,34 @@ class ExperimentsExecutor:
             test_set = test_set.cache().batch(batch_size=256).prefetch(buffer_size=AUTOTUNE)
 
             for model_name, model_function in MODELS_FUNCTIONS.items():
+                model_results = []
+
                 model = model_function()
-                model.fit(train_set, validation_data=test_set, epochs=30, batch_size=256)
+                history = model.fit(train_set, validation_data=test_set, epochs=30).history
+
+                # Take the metrics of last epoch both for training and test
+                scores = pandas.DataFrame(history).iloc[-1].to_dict()
+                model_results.append({
+                    'model': model_name,
+                    'run_type': 'train',
+                    'holdout': i,
+                    **{
+                        sanitize_ml_labels(key): value
+                        for key, value in scores.items()
+                        if not key.startswith("val_")
+                    }
+                })
+                model_results.append({
+                    "model": model_name,
+                    "run_type": "test",
+                    "holdout": i,
+                    **{
+                        sanitize_ml_labels(key[4:]): value
+                        for key, value in scores.items()
+                        if key.startswith("val_")
+                    }
+                })
+
+                results = results + model_results
+
 
