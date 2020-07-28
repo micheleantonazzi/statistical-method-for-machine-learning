@@ -52,4 +52,6 @@ class ExperimentsExecutor:
                     # Extract the resulting metric and save them
                     results.extract_holdout_results(history, self._preprocessing_pipeline.__name__, i, model_name)
 
+        results.plot_results(self._preprocessing_pipeline.__name__)
+
 
