@@ -66,6 +66,7 @@ setup(
                       "pandas",
                       "sanitize_ml_labels",
                       "sklearn",
-                      "barplots"],
+                      "barplots",
+                      "tabulate"],
     extras_require=extras,
 )
