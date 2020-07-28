@@ -1,5 +1,6 @@
 from sklearn.model_selection import StratifiedShuffleSplit
 from tensorflow.python.data.ops.dataset_ops import AUTOTUNE
+from termcolor import colored
 from tqdm import tqdm
 
 from machine_learning_project.data_manipulation.data_retrieval import DataRetrieval
@@ -35,19 +36,20 @@ class ExperimentsExecutor:
             train_set, test_set = self._data.create_tensorflow_dataset(train_index, test_index, self._preprocessing_pipeline)
 
             for model_name, model_function in MODELS_FUNCTIONS.items():
-                print(f'Holdout {i}: training {model_name}')
-                parameters = MODELS_PARAMETERS[model_name]
+                if results.load_results(self._preprocessing_pipeline.__name__, i, model_name):
+                    print(colored(f'Holdout {i}: results for {model_name} have already been calculated', 'green'))
+                else:
+                    print(colored(f'Holdout {i}: training {model_name}', 'red'))
+                    parameters = MODELS_PARAMETERS[model_name]
 
-                # Optimize train a test sets for improve performances
-                train_set_opt = train_set.cache().batch(batch_size=parameters['batch_size']).prefetch(buffer_size=AUTOTUNE)
-                test_set_opt = test_set.cache().batch(batch_size=parameters['batch_size']).prefetch(buffer_size=AUTOTUNE)
+                    # Optimize train a test sets for improve performances
+                    train_set_opt = train_set.cache().batch(batch_size=parameters['batch_size']).prefetch(buffer_size=AUTOTUNE)
+                    test_set_opt = test_set.cache().batch(batch_size=parameters['batch_size']).prefetch(buffer_size=AUTOTUNE)
 
-                model_results = []
+                    model = model_function()
+                    history = model.fit(train_set_opt, validation_data=test_set_opt, epochs=parameters['epochs']).history
 
-                model = model_function()
-                history = model.fit(train_set_opt, validation_data=test_set_opt, epochs=parameters['epochs']).history
-
-                # Extract the resulting metric and save them
-                results.extract_holdout_results(history, self._preprocessing_pipeline.__name__, i, model_name)
+                    # Extract the resulting metric and save them
+                    results.extract_holdout_results(history, self._preprocessing_pipeline.__name__, i, model_name)
 
 

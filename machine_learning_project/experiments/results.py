@@ -46,3 +46,14 @@ class Results:
         path = os.path.join(path, model_name + '.pkl')
         with open(os.path.join(path), 'wb') as f:
             pickle.dump(results, f, pickle.HIGHEST_PROTOCOL)
+
+    def load_results(self, preprocessing_pipeline: str, holdout_number: int, model_name: str):
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'results', preprocessing_pipeline,
+                            'holdout_' + str(holdout_number), model_name + '.pkl')
+
+        if os.path.exists(path):
+            with open(path, 'rb') as f:
+                self._results = self._results + pickle.load(f)
+                return True
+
+        return False
