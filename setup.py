@@ -64,6 +64,7 @@ setup(
                       "tqdm",
                       "pickle-mixin",
                       "pandas",
-                      "sanitize_ml_labels"],
+                      "sanitize_ml_labels",
+                      "sklearn"],
     extras_require=extras,
 )
