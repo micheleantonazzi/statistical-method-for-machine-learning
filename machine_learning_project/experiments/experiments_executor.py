@@ -33,10 +33,10 @@ class ExperimentsExecutor:
         for i, (train_index, test_index) in tqdm(enumerate(splits.split(images, labels)), total=self._holdouts, desc="Computing holdouts", dynamic_ncols=True):
             train_set, test_set = self._data.create_tensorflow_dataset(train_index, test_index, self._preprocessing_pipeline)
 
-            # Optimize train a test sets for improve performances
-
-
             for model_name, model_function in MODELS_FUNCTIONS.items():
+                print(f'Holdout {i}: training {model_name}')
+
+                # Optimize train a test sets for improve performances
                 train_set_opt = train_set.cache().batch(batch_size=256).prefetch(buffer_size=AUTOTUNE)
                 test_set_opt = test_set.cache().batch(batch_size=256).prefetch(buffer_size=AUTOTUNE)
 
