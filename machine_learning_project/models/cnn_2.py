@@ -25,3 +25,7 @@ def cnn_2():
     )
 
     return model
+
+
+def cnn_2_parameters():
+    return {'epochs': 20, 'batch_size': 256}

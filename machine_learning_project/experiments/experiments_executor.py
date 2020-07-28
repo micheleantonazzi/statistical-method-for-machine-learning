@@ -8,6 +8,8 @@ from machine_learning_project.models.models_functions import MODELS_FUNCTIONS
 import pandas
 from sanitize_ml_labels import sanitize_ml_labels
 
+from machine_learning_project.models.models_parameters import MODELS_PARAMETERS
+
 
 class ExperimentsExecutor:
     def __init__(self, data: DataRetrieval, holdouts: int = 3, test_set_size: float = 0.2, pipeline=None):
@@ -35,15 +37,16 @@ class ExperimentsExecutor:
 
             for model_name, model_function in MODELS_FUNCTIONS.items():
                 print(f'Holdout {i}: training {model_name}')
+                parameters = MODELS_PARAMETERS[model_name]
 
                 # Optimize train a test sets for improve performances
-                train_set_opt = train_set.cache().batch(batch_size=256).prefetch(buffer_size=AUTOTUNE)
-                test_set_opt = test_set.cache().batch(batch_size=256).prefetch(buffer_size=AUTOTUNE)
+                train_set_opt = train_set.cache().batch(batch_size=parameters['batch_size']).prefetch(buffer_size=AUTOTUNE)
+                test_set_opt = test_set.cache().batch(batch_size=parameters['batch_size']).prefetch(buffer_size=AUTOTUNE)
 
                 model_results = []
 
                 model = model_function()
-                history = model.fit(train_set_opt, validation_data=test_set_opt, epochs=20, batch_size=8).history
+                history = model.fit(train_set_opt, validation_data=test_set_opt, epochs=parameters['epochs']).history
 
                 # Take the metrics of last epoch both for training and test
                 scores = pandas.DataFrame(history).iloc[-1].to_dict()
