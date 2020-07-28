@@ -88,7 +88,7 @@ class DataRetrieval:
         images_path = numpy.array(images_path)
         labels = numpy.array(labels)
         self._data = {'images': images_path, 'labels': labels}
-        return self._data
+        return images_path, labels
 
     def create_tensorflow_dataset(self, train_set_indices: numpy.ndarray, test_set_indices: numpy.ndarray, map_function: Function):
         """
@@ -100,12 +100,14 @@ class DataRetrieval:
         """
         train_set = tf.data.Dataset.from_generator(
             lambda: zip(self._data['images'][train_set_indices], self._data['labels'][train_set_indices]),
-            (tf.string, tf.int8)
+            (tf.string, tf.int8),
+            (tf.TensorShape([]), tf.TensorShape([]))
         ).map(map_function, num_parallel_calls=AUTOTUNE)
 
         test_set = tf.data.Dataset.from_generator(
             lambda: zip(self._data['images'][test_set_indices], self._data['labels'][test_set_indices]),
-            (tf.string, tf.int8)
+            (tf.string, tf.int8),
+            (tf.TensorShape([]), tf.TensorShape([]))
         ).map(map_function, num_parallel_calls=AUTOTUNE)
 
         return train_set, test_set
