@@ -16,7 +16,7 @@ In the real world, there are a lot of different tasks that are too complicated t
 
 ## Data retrieval
 
-The aim of this work is to evaluate the performances of deep networks in an image multi-classification task. The dataset consists into a wide series of images that depict different types of fruit and vegetable. It is downloadable by following this [link](https://www.kaggle.com/moltean/fruits). The dataset includes a lot fruit and vegetable types, but in this experiment only 10 of them are considered. They are *apple*, *banana*, *plum*, *pepper*, *cherry*, *grape*, *tomato*, *potato*, *pear* and *peach*. These are the ten classes that the learning machines will have to provide. In the dataset, each categories is divided in sub-group. For example, there exists a lot a different types of apple (apple Golden, apple Granny Smith, apple Pink Lady, etc) and with a different colors (yellow, red, green, etc). All varieties of each type of fruit or vegetable are grouped together in a single set. The figure below shows the ten categories.
+The aim of this work is to evaluate the performances of deep networks in an image multi-classification task. The dataset consists of a wide series of images that depict different types of fruit and vegetable. It is downloadable by following this [link](https://www.kaggle.com/moltean/fruits). The dataset includes a lot of fruit and vegetable types, but in this experiment, only 10 of them are considered. They are *apple*, *banana*, *plum*, *pepper*, *cherry*, *grape*, *tomato*, *potato*, *pear*, and *peach*. These are the ten classes that the learning machines will have to provide. In the dataset, each category is divided into sub-group. For example, there exist a lot of different types of apple (apple Golden, apple Granny Smith, apple Pink Lady, etc) and with different colors (yellow, red, green, etc). All varieties of each type of fruit or vegetable are grouped together in a single set. The figure below shows the ten categories.
 
 ![The ten categories of fruit and vegetable](images/fruit-categories.png)
 
@@ -36,3 +36,7 @@ The following table and plot show the relative number of samples.
 | Peach     | 1640              |
 
 ![Number of samples for each class](images/n_samples.png)
+
+## Data preprocessing
+
+The problem data (the images) have to be properly elaborated before being used by models. The aim of the data preprocessing phase is to make the dataset easier to analyze, so as to increase the models' performance and reduce the training time. 
