@@ -2,7 +2,6 @@ import tensorflow as tf
 from tensorflow.keras.metrics import Accuracy
 from tensorflow.keras.losses import SparseCategoricalCrossentropy
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Input
-from tensorflow.python.keras.layers import Rescaling
 
 
 def cnn_1():
