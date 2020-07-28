@@ -65,6 +65,7 @@ setup(
                       "pickle-mixin",
                       "pandas",
                       "sanitize_ml_labels",
-                      "sklearn"],
+                      "sklearn",
+                      "barplots"],
     extras_require=extras,
 )
