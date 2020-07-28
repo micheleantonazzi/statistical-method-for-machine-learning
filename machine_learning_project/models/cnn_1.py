@@ -22,6 +22,5 @@ def cnn_1():
         loss=SparseCategoricalCrossentropy(from_logits=True),
         metrics=['accuracy'],
     )
-    model.summary()
 
     return model
