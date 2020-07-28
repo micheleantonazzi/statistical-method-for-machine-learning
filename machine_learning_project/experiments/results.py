@@ -19,13 +19,13 @@ class Results:
             **{
                 sanitize_ml_labels(key): value
                 for key, value in scores.items()
-                if not key.startswith("val_")
+                if not key.startswith('val_')
             }
         })
         model_results.append({
-            "model": model_name,
-            "run_type": "test",
-            "holdout": holdout_number,
+            'model': model_name,
+            'run_type': 'test',
+            'holdout': holdout_number,
             **{
                 sanitize_ml_labels(key[4:]): value
                 for key, value in scores.items()
