@@ -1,0 +1,12 @@
+Table for scale_pipeline experiment, metric Accuracy
+| Models   | Training      | Test          |
+|:---------|:--------------|:--------------|
+| CNN_1    | mean = 0.9971 | mean = 0.9952 |
+|          | STD = 0.0032  | STD = 0.0036  |
+| CNN_2    | mean = 0.9897 | mean = 0.9884 |
+|          | STD = 0.0055  | STD = 0.0054  |
+| CNN_3    | mean = 0.9257 | mean = 0.9245 |
+|          | STD = 0.0173  | STD = 0.0172  |
+| CNN_4    | mean = 0.9916 | mean = 0.9888 |
+|          | STD = 0.0038  | STD = 0.0059  |
+
