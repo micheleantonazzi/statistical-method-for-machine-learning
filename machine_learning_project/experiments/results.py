@@ -6,6 +6,7 @@ from sanitize_ml_labels import sanitize_ml_labels
 import numpy as np
 from tabulate import tabulate
 import matplotlib.pyplot as plt
+from scipy.stats import wilcoxon
 
 
 class Results:
@@ -76,8 +77,9 @@ class Results:
             path=os.path.dirname(os.path.abspath(__file__)) + '/plots/plots_' + preprocessing_pipeline + '/{feature}.png'
         )
 
-        open(os.path.dirname(os.path.abspath(__file__)) + '/plots/plots_' + preprocessing_pipeline + '/metrics_table.txt', 'w').close()
-        file = open(os.path.dirname(os.path.abspath(__file__)) + '/plots/plots_' + preprocessing_pipeline + '/metrics_table.txt', 'w')
+        path = os.path.dirname(os.path.abspath(__file__)) + '/plots/plots_' + preprocessing_pipeline + '/metrics_table.txt'
+        open(path, 'w').close()
+        file = open(path, 'w')
         models = results.model.unique()
         run_types = results.run_type.unique()
         for metric in ['Accuracy']:
@@ -96,7 +98,7 @@ class Results:
             file.writelines(tabulate(df, tablefmt="pipe", headers="keys") + '\n\n')
         file.close()
 
-    def plot_history(self, history, preprocessing_pipeline, model_name):
+    def plot_history(self, history, preprocessing_pipeline: str, model_name: str):
         plt.close('all')
         fig, (ax1, ax2) = plt.subplots(1, 2)
         ax1.plot(history['accuracy'], label='accuracy')
@@ -114,4 +116,33 @@ class Results:
         if not os.path.exists(path):
             os.makedirs(path)
         fig.savefig(os.path.join(path, model_name.lower() + '_training_accuracy.png'))
+
+    def execute_wilcoxon_test(self, preprocessing_pipeline: str, alpha: int = 0.01):
+        results = pandas.DataFrame(self._results)
+        results = results[(results['run_type'] == 'test')]
+        models = results.model.unique()
+        path = os.path.dirname(os.path.abspath(__file__)) + '/plots/plots_' + preprocessing_pipeline + '/wilcoxon.txt'
+        open(path, 'w').close()
+        file = open(path, 'w')
+        for metric in ['Accuracy', 'Loss']:
+            for model_a in models:
+                for model_b in models:
+                    if not model_a == model_b:
+                        model_a_values = results[results['model'] == model_a][metric]
+                        model_b_values = results[results['model'] == model_b][metric]
+                        stats, p_value = wilcoxon(model_a_values, model_b_values)
+                        if p_value > alpha:
+                            file.write(f"In {preprocessing_pipeline} experiments, for metric {metric}, {model_a} and {model_b} statistically identical, with a p_value of {p_value}\n")
+                        elif not metric == 'Loss':
+                            if model_a_values.mean() > model_b_values.mean():
+                                file.write(f"In {preprocessing_pipeline} experiments, for metric {metric}, {model_a} is BETTER than {model_b}, with a p_value of {p_value}\n")
+                            else:
+                                file.write(f"In {preprocessing_pipeline} experiments, for metric {metric}, {model_a} is WORST than {model_b}, with a p_value of {p_value}\n")
+                        else:
+                            if model_a_values.mean() > model_b_values.mean():
+                                file.write(f"In {preprocessing_pipeline} experiments, for metric {metric}, {model_a} is WORST than {model_b}, with a p_value of {p_value}\n")
+                            else:
+                                file.write(f"In {preprocessing_pipeline} experiments, for metric {metric}, {model_a} is BETTER than {model_b}, with a p_value of {p_value}\n")
+
+            file.write('\n')
 

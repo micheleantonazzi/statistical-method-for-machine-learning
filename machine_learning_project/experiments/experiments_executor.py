@@ -56,5 +56,6 @@ class ExperimentsExecutor:
                     if i == 0:
                         results.plot_history(history, self._preprocessing_pipeline.__name__, model_name)
         results.plot_results(self._preprocessing_pipeline.__name__)
+        results.execute_wilcoxon_test(self._preprocessing_pipeline.__name__)
 
 
