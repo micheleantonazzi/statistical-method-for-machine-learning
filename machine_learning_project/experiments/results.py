@@ -97,6 +97,7 @@ class Results:
         file.close()
 
     def plot_history(self, history, preprocessing_pipeline, model_name):
+        plt.close('all')
         fig, (ax1, ax2) = plt.subplots(1, 2)
         ax1.plot(history['accuracy'], label='accuracy')
         ax1.plot(history['val_accuracy'], label='val_accuracy')
@@ -108,5 +109,6 @@ class Results:
         ax2.set(xlabel='Epoch', ylabel='Loss')
         ax2.legend(loc='lower left')
         ax2.set_title(f'{model_name} training loss')
+        fig.tight_layout()
         fig.savefig('experiments/plots/plots_' + preprocessing_pipeline + '/' + model_name.lower() + '_training_accuracy.png')
 
