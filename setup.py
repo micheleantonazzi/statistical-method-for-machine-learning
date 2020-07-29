@@ -67,6 +67,7 @@ setup(
                       "sanitize_ml_labels",
                       "sklearn",
                       "barplots",
-                      "tabulate"],
+                      "tabulate",
+                      "scipy"],
     extras_require=extras,
 )
