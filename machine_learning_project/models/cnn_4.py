@@ -28,4 +28,4 @@ def cnn_4():
 
 
 def cnn_4_parameters():
-    return {'epochs': 50, 'batch_size': 32}
+    return {'epochs': 50, 'batch_size': 64}
