@@ -4,9 +4,13 @@ from tensorflow.keras.losses import SparseCategoricalCrossentropy
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Input
 
 
-def cnn_1():
+def cnn_3():
     model = tf.keras.Sequential([
         Input(shape=(32, 32, 3)),
+        Conv2D(8, 2, activation='relu'),
+        MaxPooling2D(2, 2),
+        Conv2D(4, 2, activation='relu'),
+        MaxPooling2D(2, 2),
         Conv2D(2, 2, activation='relu'),
         MaxPooling2D(2, 2),
         Flatten(),
@@ -23,5 +27,5 @@ def cnn_1():
     return model
 
 
-def cnn_1_parameters():
+def cnn_3_parameters():
     return {'epochs': 20, 'batch_size': 256}

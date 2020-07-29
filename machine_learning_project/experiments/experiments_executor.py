@@ -8,7 +8,7 @@ from machine_learning_project.experiments.results import Results
 from machine_learning_project.models.models_functions import MODELS_FUNCTIONS
 
 
-from machine_learning_project.models.models_parameters import MODELS_PARAMETERS
+from machine_learning_project.models.models_functions import MODELS_PARAMETERS
 
 
 class ExperimentsExecutor:
