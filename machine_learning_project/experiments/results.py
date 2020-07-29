@@ -110,5 +110,8 @@ class Results:
         ax2.legend(loc='lower left')
         ax2.set_title(f'{model_name} training loss')
         fig.tight_layout()
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'plots', 'plots_' + preprocessing_pipeline)
+        if not os.path.exists(path):
+            os.makedirs(path)
         fig.savefig('experiments/plots/plots_' + preprocessing_pipeline + '/' + model_name.lower() + '_training_accuracy.png')
 
