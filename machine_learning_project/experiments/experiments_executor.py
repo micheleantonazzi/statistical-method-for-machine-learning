@@ -12,7 +12,7 @@ from machine_learning_project.models.models_functions import MODELS_PARAMETERS
 
 
 class ExperimentsExecutor:
-    def __init__(self, data: DataRetrieval, holdouts: int = 3, test_set_size: float = 0.2, pipeline=None):
+    def __init__(self, data: DataRetrieval, holdouts: int = 10, test_set_size: float = 0.2, pipeline=None):
         self._data = data
         self._holdouts = holdouts
         self._test_set_size = test_set_size
