@@ -5,11 +5,13 @@ from barplots import barplots
 from sanitize_ml_labels import sanitize_ml_labels
 import numpy as np
 from tabulate import tabulate
+import matplotlib.pyplot as plt
 
 
 class Results:
     def __init__(self):
         self._results = []
+        self._histories = {}
 
     def extract_holdout_results(self, history, preprocessing_pipeline: str, holdout_number: int, model_name: str):
         model_results = []
@@ -93,3 +95,14 @@ class Results:
             file.writelines(f'Table for {preprocessing_pipeline} experiment, metric {metric}\n')
             file.writelines(tabulate(df, tablefmt="pipe", headers="keys") + '\n\n')
         file.close()
+
+    def plot_history(self, history, preprocessing_pipeline, model_name):
+        plt.plot(history['accuracy'], label='accuracy')
+        plt.plot(history['val_accuracy'], label='val_accuracy')
+        plt.xlabel('Epoch')
+        plt.ylabel('Accuracy')
+        plt.ylim([0.5, 1])
+        plt.legend(loc='lower right')
+        plt.title(f'{model_name} training accuracy')
+        plt.savefig('experiments/plots/plots_' + preprocessing_pipeline + '/' + model_name.lower() + '_training_accuracy.png')
+
