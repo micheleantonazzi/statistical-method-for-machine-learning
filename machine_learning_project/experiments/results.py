@@ -73,11 +73,11 @@ class Results:
             show_legend=False,
             height=height,
             orientation="horizontal",
-            path='experiments/plots/plots_' + preprocessing_pipeline + '/{feature}.png'
+            path=os.path.dirname(os.path.abspath(__file__)) + '/plots/plots_' + preprocessing_pipeline + '/{feature}.png'
         )
 
-        open('experiments/plots/plots_' + preprocessing_pipeline + '/metrics_table.txt', 'w').close()
-        file = open('experiments/plots/plots_' + preprocessing_pipeline + '/metrics_table.txt', 'w')
+        open(os.path.dirname(os.path.abspath(__file__)) + '/plots/plots_' + preprocessing_pipeline + '/metrics_table.txt', 'w').close()
+        file = open(os.path.dirname(os.path.abspath(__file__)) + '/plots/plots_' + preprocessing_pipeline + '/metrics_table.txt', 'w')
         models = results.model.unique()
         run_types = results.run_type.unique()
         for metric in ['Accuracy']:
@@ -113,5 +113,5 @@ class Results:
         path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'plots', 'plots_' + preprocessing_pipeline)
         if not os.path.exists(path):
             os.makedirs(path)
-        fig.savefig('experiments/plots/plots_' + preprocessing_pipeline + '/' + model_name.lower() + '_training_accuracy.png')
+        fig.savefig(os.path.join(path, model_name.lower() + '_training_accuracy.png'))
 
