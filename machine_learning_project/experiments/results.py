@@ -11,82 +11,81 @@ from scipy.stats import wilcoxon
 
 class Results:
     def __init__(self):
-        self._results = []
+        self._results = pandas.DataFrame(columns=['model_name', 'run_type', 'holdout', 'Loss', 'Accuracy'])
         self._histories = {}
 
     def extract_holdout_results(self, history, preprocessing_pipeline: str, holdout_number: int, model_name: str):
-        model_results = []
-
         scores = pandas.DataFrame(history).iloc[-1].to_dict()
-        model_results.append({
-            'model': model_name,
-            'run_type': 'train',
-            'holdout': holdout_number,
-            **{
-                sanitize_ml_labels(key): value
-                for key, value in scores.items()
-                if not key.startswith('val_')
-            }
-        })
-        model_results.append({
-            'model': model_name,
-            'run_type': 'test',
-            'holdout': holdout_number,
-            **{
-                sanitize_ml_labels(key[4:]): value
-                for key, value in scores.items()
-                if key.startswith("val_")
-            }
-        })
+        self._results = self._results.append(pandas.DataFrame([
+            {
+                'model_name': model_name,
+                'run_type': 'train',
+                'holdout': holdout_number,
+                **{
+                    sanitize_ml_labels(key): value
+                    for key, value in scores.items()
+                    if not key.startswith('val_')
+                }
+            },
+            {
+                'model_name': model_name,
+                'run_type': 'test',
+                'holdout': holdout_number,
+                **{
+                    sanitize_ml_labels(key[4:]): value
+                    for key, value in scores.items()
+                    if key.startswith("val_")
+                }
+            }]
+        ), ignore_index=True)
 
-        self._results = self._results + model_results
-        self.save_results(model_results, preprocessing_pipeline, holdout_number, model_name)
+        self.save_model_results(preprocessing_pipeline, model_name)
 
-    def save_results(self, results, preprocessing_pipeline: str, holdout_number: int, model_name: str):
-
-        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'results', preprocessing_pipeline,
-                            'holdout_' + str(holdout_number))
+    def save_model_results(self, preprocessing_pipeline: str, model_name: str):
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'results', preprocessing_pipeline)
         if not os.path.exists(path):
             os.makedirs(path)
 
         path = os.path.join(path, model_name + '.pkl')
         with open(os.path.join(path), 'wb') as f:
-            pickle.dump(results, f, pickle.HIGHEST_PROTOCOL)
+            pickle.dump(list(self._results[self._results['model_name'] == model_name].T.to_dict().values()), f, pickle.HIGHEST_PROTOCOL)
 
-    def load_results(self, preprocessing_pipeline: str, holdout_number: int, model_name: str):
-        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'results', preprocessing_pipeline,
-                            'holdout_' + str(holdout_number), model_name + '.pkl')
+    def load_results(self, preprocessing_pipeline: str, holdout: int, model_name: str):
+        # Load file only the first time
+        if self._results[self._results['model_name'] == model_name].shape[0] == 0:
+            path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'results', preprocessing_pipeline,
+                                model_name + '.pkl')
 
-        if os.path.exists(path):
-            with open(path, 'rb') as f:
-                self._results = self._results + pickle.load(f)
-                return True
+            if os.path.exists(path):
+                with open(path, 'rb') as f:
+                    self._results = self._results.append(pandas.DataFrame(pickle.load(f)))
 
-        return False
+        return self._results[(self._results['model_name'] == model_name) & (self._results['holdout'] == holdout)].shape[0] > 0
 
     def plot_results(self, preprocessing_pipeline: str):
-        results = pandas.DataFrame(self._results)
-        results = results.drop(columns=['holdout'])
-        height = len(results['model'].unique())
+        results = self._results.drop(columns=['holdout'])
+        height = len(results['model_name'].unique())
         barplots(
             results,
-            groupby=["model", "run_type"],
+            groupby=['model_name', 'run_type'],
             show_legend=False,
             height=height,
             orientation="horizontal",
-            path=os.path.dirname(os.path.abspath(__file__)) + '/plots/plots_' + preprocessing_pipeline + '/{feature}.png'
+            path=os.path.dirname(
+                os.path.abspath(__file__)) + '/plots/plots_' + preprocessing_pipeline + '/{feature}.png'
         )
 
-        path = os.path.dirname(os.path.abspath(__file__)) + '/plots/plots_' + preprocessing_pipeline + '/metrics_table.txt'
+        path = os.path.dirname(
+            os.path.abspath(__file__)) + '/plots/plots_' + preprocessing_pipeline + '/metrics_table.txt'
         open(path, 'w').close()
         file = open(path, 'w')
-        models = results.model.unique()
+        models = results.model_name.unique()
         run_types = results.run_type.unique()
         for metric in ['Accuracy']:
             temp = {run_type: [] for run_type in run_types}
             for model in models:
                 for run_type in run_types:
-                    res = results[(results['model'] == model) & (results['run_type'] == run_type)][metric].values
+                    res = results[(results['model_name'] == model) & (results['run_type'] == run_type)][metric].values
                     temp[run_type].append(f'mean = {round(np.mean(res), 4)}\nSTD = {round(np.std(res), 4)}')
 
             df = pandas.DataFrame({
@@ -118,9 +117,8 @@ class Results:
         fig.savefig(os.path.join(path, model_name.lower() + '_training_accuracy.png'))
 
     def execute_wilcoxon_test(self, preprocessing_pipeline: str, alpha: int = 0.01):
-        results = pandas.DataFrame(self._results)
-        results = results[(results['run_type'] == 'test')]
-        models = results.model.unique()
+        results = self._results[(self._results['run_type'] == 'test')]
+        models = results.model_name.unique()
         path = os.path.dirname(os.path.abspath(__file__)) + '/plots/plots_' + preprocessing_pipeline + '/wilcoxon.txt'
         open(path, 'w').close()
         file = open(path, 'w')
@@ -128,21 +126,25 @@ class Results:
             for model_a in models:
                 for model_b in models:
                     if not model_a == model_b:
-                        model_a_values = results[results['model'] == model_a][metric]
-                        model_b_values = results[results['model'] == model_b][metric]
+                        model_a_values = results[results['model_name'] == model_a][metric]
+                        model_b_values = results[results['model_name'] == model_b][metric]
                         stats, p_value = wilcoxon(model_a_values, model_b_values)
                         if p_value > alpha:
-                            file.write(f"In {preprocessing_pipeline} experiments, for metric {metric}, {model_a} and {model_b} statistically identical, with a p_value of {p_value}\n")
+                            file.write(
+                                f"In {preprocessing_pipeline} experiments, for metric {metric}, {model_a} and {model_b} statistically identical, with a p_value of {p_value}\n")
                         elif not metric == 'Loss':
                             if model_a_values.mean() > model_b_values.mean():
-                                file.write(f"In {preprocessing_pipeline} experiments, for metric {metric}, {model_a} is BETTER than {model_b}, with a p_value of {p_value}\n")
+                                file.write(
+                                    f"In {preprocessing_pipeline} experiments, for metric {metric}, {model_a} is BETTER than {model_b}, with a p_value of {p_value}\n")
                             else:
-                                file.write(f"In {preprocessing_pipeline} experiments, for metric {metric}, {model_a} is WORST than {model_b}, with a p_value of {p_value}\n")
+                                file.write(
+                                    f"In {preprocessing_pipeline} experiments, for metric {metric}, {model_a} is WORST than {model_b}, with a p_value of {p_value}\n")
                         else:
                             if model_a_values.mean() > model_b_values.mean():
-                                file.write(f"In {preprocessing_pipeline} experiments, for metric {metric}, {model_a} is WORST than {model_b}, with a p_value of {p_value}\n")
+                                file.write(
+                                    f"In {preprocessing_pipeline} experiments, for metric {metric}, {model_a} is WORST than {model_b}, with a p_value of {p_value}\n")
                             else:
-                                file.write(f"In {preprocessing_pipeline} experiments, for metric {metric}, {model_a} is BETTER than {model_b}, with a p_value of {p_value}\n")
+                                file.write(
+                                    f"In {preprocessing_pipeline} experiments, for metric {metric}, {model_a} is BETTER than {model_b}, with a p_value of {p_value}\n")
 
             file.write('\n')
-
