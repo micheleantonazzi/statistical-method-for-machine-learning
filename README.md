@@ -60,12 +60,12 @@ The problem data (the images) have to be properly elaborated before being used b
 
 ## Experiments evaluation
 
-After the preprocessing pipeline, the data are ready to pass to the learning models. Cross-validation is used to evaluate the models' performances, in particular the Hold-out technique. This method consists into split the dataset in two separate sets: the training set (used to train the leaning machines) and the test set (used to evaluate the models' performance). In this case, the split is 80% and 20% for training and test set. The experiments are executed over 10 different holdouts. The [method](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedShuffleSplit.html) used to compute the holdouts is implemented in the sklearn library. This method randomly separates the training and test set indices, preserving the percentage of samples for each class. It is set with 42 as a random state parameter. The numerically evaluate the models the following metrics are used: 
+After the preprocessing pipeline, the data are ready to pass to the learning models. Cross-validation is used to evaluate the models' performances, in particular the Hold-out technique. This method consists into split the dataset in two separate sets: the training set (used to train the leaning machines) and the test set (used to evaluate the models' performance). In this case, the split is 80% and 20% for training and test set. The union between them form an holdout. The experiments are executed over 20 different holdouts. The [method](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedShuffleSplit.html) used to compute the holdouts is implemented in the sklearn library. This method randomly separates the training and test set indices, preserving the percentage of samples for each class. It is set with 42 as a random state parameter. To numerically evaluate the models the following metrics are used: 
 
-- **loss**: the amount of the model's loss function
+- **loss function value**: the value of the model's loss function
 - **accuracy:** the ration between the correct predictions and the total number of samples.
 
-The final results are the mean and the standard deviation obtained by the learning machines through the holdouts. These results and the related conclusions are finally validated using the Wilcoxon signed-rank test with a p-value threshold of 0.01. It is a non-parametric statistical test to compare hypotheses made on repeated measures.
+The final results are the mean and the standard deviation of the metrics obtained by the learning machines using each holdouts (both for training and validation phases). These results and the related conclusions are finally validated using the Wilcoxon signed-rank test with a p-value threshold of 0.01. It is a non-parametric statistical test to compare hypotheses made on repeated measures. In addiction, for each model, the trend of the metrics during the training phase are plotted to understand how the model learns during the succession of epochs. This is done only for the first holdout.
 
 # Models
 
@@ -198,3 +198,78 @@ The last convolutional neural networks is called *CNN_4*. It has the same archit
 | Loss function    | sparse categorical crossentropy |
 | Epochs           | 50                              |
 | Batch size       | 64                              |
+
+# Experimental results
+
+## Metrics over the holdouts
+
+In this section the experimental results are reported. For each metric (loss function value and accuracy) there are a table and a plot to confront the learning machine performance. Each metric is calculated for each model for each holdout and the final results are the mean and the standard deviation of the metrics obtained over the holdouts. The values are reported for both training and testing phases.
+
+**Accuracy**
+
+| Models     | Training      | Test          |
+| :--------- | :------------ | :------------ |
+| Perceptron | mean = 0.9665 | mean = 0.9633 |
+|            | STD = 0.0016  | STD = 0.0035  |
+| FFNN       | mean = 0.9993 | mean = 0.9987 |
+|            | STD = 0.0008  | STD = 0.0009  |
+| CNN_1      | mean = 0.9982 | mean = 0.9969 |
+|            | STD = 0.0012  | STD = 0.0022  |
+| CNN_2      | mean = 0.9854 | mean = 0.9839 |
+|            | STD = 0.0074  | STD = 0.007   |
+| CNN_3      | mean = 0.8814 | mean = 0.8797 |
+|            | STD = 0.0239  | STD = 0.0252  |
+| CNN_4      | mean = 0.9627 | mean = 0.961  |
+|            | STD = 0.031   | STD = 0.0314  |
+
+![Accuracy metric values for each model](images/accuracy.png)
+
+**Loss function value**
+
+| Models     | Training      | Test          |
+| :--------- | :------------ | :------------ |
+| Perceptron | mean = 0.1529 | mean = 0.1584 |
+|            | STD = 0.0043  | STD = 0.0069  |
+| FFNN       | mean = 0.0095 | mean = 0.0109 |
+|            | STD = 0.0051  | STD = 0.0053  |
+| CNN_1      | mean = 0.0139 | mean = 0.0169 |
+|            | STD = 0.005   | STD = 0.0071  |
+| CNN_2      | mean = 0.0511 | mean = 0.0551 |
+|            | STD = 0.0214  | STD = 0.0206  |
+| CNN_3      | mean = 0.3454 | mean = 0.3487 |
+|            | STD = 0.0659  | STD = 0.0664  |
+| CNN_4      | mean = 0.1103 | mean = 0.117  |
+|            | STD = 0.0885  | STD = 0.09    |
+
+![Loss function values for each model](images/loss.png)
+
+## Metrics during training phase
+
+The following graphs report the metrics trend for each model for both training and validation phases, calculated using the first holdout.
+
+**Perceptron**
+
+![Accuracy and loss function values for Perceptron model](images/perceptron_training_accuracy.png)
+
+**FFNN**
+
+![Accuracy and loss function values for *FFNN* model](images/ffnn_training_accuracy.png)
+
+**CNN_1**
+
+![Accuracy and loss function values for *CNN_1* model](images/cnn_1_training_accuracy.png)
+
+**CNN_2**
+
+![Accuracy and loss function values for *CNN_2* model](images/cnn_2_training_accuracy.png)
+
+**CNN_3**
+
+![Accuracy and loss function values for *CNN_3* model](images/cnn_3_training_accuracy.png)
+
+**CNN_4**
+
+![Accuracy and loss function values for *CNN_4* model](images/cnn_4_training_accuracy.png)
+
+# Conclusions
+
