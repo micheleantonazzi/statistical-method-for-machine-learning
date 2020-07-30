@@ -245,7 +245,7 @@ In this section the experimental results are reported. For each metric (loss fun
 
 ## Metrics during training phase
 
-The following graphs report the metrics trend for each model for both training and validation phases, calculated using the first holdout.
+The following graphs show the trend of the metric for each model during the training phase, calculated both with the training and test sets.
 
 **Perceptron**
 
