@@ -60,16 +60,22 @@ The problem data (the images) have to be properly elaborated before being used b
 
 ## Experiments evaluation
 
-After preprocessing pipeline, the data are ready to pass to the learning models. Cross-validation is used to evaluate the models performances, in particular the Hold-out technique. This method consists into split the dataset in two separate sets: the training set (used to train the leaning machines) and the test set (used to evaluate the models' performance). In this case, the split is 80% and 20% for training and test set. The experiments are executed over 10 different holdouts. The [method](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedShuffleSplit.html) used to compute the holdouts is implemented in sklearn library. This method randomly separates the training and test set indices, preserving the percentage of samples for each class. It is set with 42 as random state parameter. The numerically evaluate the models the following metrics are used:  
+After the preprocessing pipeline, the data are ready to pass to the learning models. Cross-validation is used to evaluate the models' performances, in particular the Hold-out technique. This method consists into split the dataset in two separate sets: the training set (used to train the leaning machines) and the test set (used to evaluate the models' performance). In this case, the split is 80% and 20% for training and test set. The experiments are executed over 10 different holdouts. The [method](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedShuffleSplit.html) used to compute the holdouts is implemented in the sklearn library. This method randomly separates the training and test set indices, preserving the percentage of samples for each class. It is set with 42 as a random state parameter. The numerically evaluate the models the following metrics are used: 
 
-* **loss**: the amount of the model's loss function
-* **accuracy:** the ration between the correct predictions and the total number of samples.
+- **loss**: the amount of the model's loss function
+- **accuracy:** the ration between the correct predictions and the total number of samples.
 
-The final results are the mean and the standard deviation obtained by the learning machines through the holdouts. These results and the related conclusions are finally validated using the Wilcoxon signed-rank test with a p value threshold of 0.01. It is a non-parametric statistical test to compare hypotheses made on repeated measures.
+The final results are the mean and the standard deviation obtained by the learning machines through the holdouts. These results and the related conclusions are finally validated using the Wilcoxon signed-rank test with a p-value threshold of 0.01. It is a non-parametric statistical test to compare hypotheses made on repeated measures.
 
 # Models
 
-This section reports the architecture and the hyper-parameters of the neural networks used to classy the images. In particular, the model tested are feed-forward neural networks (FFNNs) and concolutional neural networks (CNNs). The first model (called *Perceptron*) is a classical neural network with the simplest architecture. It has only the input and the output layers. Its purpose is to examine the network performance with the given dataset to build better models.
+This section reports the architecture and the hyper-parameters of the neural networks used to classy the images. In particular, the model tested are feed-forward neural networks (FFNNs) and convolutional neural networks (CNNs). 
+
+## Feed-forward neural network
+
+The feed-forward neural network is the first and simplest type of artificial neural network. The information moves in only one direction, forward, from the input nodes, through the hidden nodes, and to the output nodes. The layers of neurons are fully connected, in the sense that each neuron of a layer is connected to all neurons of the previous and next layers. The following tables specify the architecture and the hyper-parameters for each model. In particular, for each layer, the number of neurons (called *Units*) and the activation function are reported. Instead, for the hyper-parameters, the tables contain the weight estimator and its learning rate, the loss function, the number of epochs, and the batch size. 
+
+The first model (called *Perceptron*) is a classical neural network with the simplest architecture. It consists of a single layer which is also the output layer. Its purpose is to examine the network performance with the given dataset to build better models.
 
 | Layers  | Type    | Units | **Activation** |
 | ------- | ------- | ----- | -------------- |
@@ -85,14 +91,14 @@ This section reports the architecture and the hyper-parameters of the neural net
 | Epochs           | 20                              |
 | Batch size       | 256                             |
 
-The second model is called *FFNN*. It is similar to the first with a more complex architecture. In particular, this network has two hidden layers.
+The second model is called *FFNN*. It is similar to the first with more complex architecture. In particular, this network has two hidden layers.
 
 | Layers  | Type    | Units | **Activation** |
 | ------- | ------- | ----- | -------------- |
 | Layer 1 | Input   | -     | -              |
 | Layer 2 | Flatten | -     | -              |
-| Layer 3 | Dense   | 64    | Relu           |
-| Layer 4 | Dense   | 32    | Relu           |
+| Layer 3 | Dense   | 64    | ReLU           |
+| Layer 4 | Dense   | 32    | ReLU           |
 | Layer 5 | Dense   | 10    | Linear         |
 
 | Parameter        | Value                           |
@@ -103,15 +109,20 @@ The second model is called *FFNN*. It is similar to the first with a more comple
 | Epochs           | 20                              |
 | Batch size       | 256                             |
 
-The third model is the first convolutional neural network and it is called *CNN_1*. Its architecture is really simple, with a single convolutional layer (after the input layer) and a dense leye(before the output layer).
+## Convolutional neural networks
 
-| Layers  | Type    | Units | **Activation** |
-| ------- | ------- | ----- | -------------- |
-| Layer 1 | Input   | -     | -              |
-| Layer 2 | Flatten | -     | -              |
-| Layer 3 | Dense   | 64    | Relu           |
-| Layer 4 | Dense   | 32    | Relu           |
-| Layer 5 | Dense   | 10    | Linear         |
+The next models are convolutional neural networks. This network at first learns what are the data features using convolutional layers and subsequently uses these features to label the data thanks to fully connected layers. CNNs are often used to analyze visual images thanks to their space invariant characteristics. The following tables specify the architecture and the hyper-parameters for each model. In particular, for each layer, the number of filters, the kernel size used by them, and the activation function are reported. The kernel size is expressed with one or two numbers based on the number of dimensions, while each number indicates the length of its dimension. Instead, the hyper-parameters are the same as those listed in the previous section. 
+
+The first convolutional neural network is called *CNN_1*. Its architecture is really simple, with a single convolutional layer (after the input layer), a pooling layer (which implements the max operation), and a dense layer (before the output layer).
+
+| Layers  | Type         | **Filters** | **Kernel size** | **Activation** |
+| ------- | ------------ | ----------- | --------------- | -------------- |
+| Layer 1 | Input        | -           | -               | -              |
+| Layer 2 | Conv2D       | 2           | 3, 3            | ReLU           |
+| Layer 3 | MaxPooling2D | -           | 2, 2            | -              |
+| Layer 4 | Flatten      | -           | -               | -              |
+| Layer 5 | Dense        | 64          |                 | ReLU           |
+| Layer 6 | Dense        | 10          |                 | Linear         |
 
 | Parameter        | Value                           |
 | ---------------- | ------------------------------- |
@@ -120,3 +131,70 @@ The third model is the first convolutional neural network and it is called *CNN_
 | Loss function    | sparse categorical crossentropy |
 | Epochs           | 20                              |
 | Batch size       | 256                             |
+
+The second convolutional neural network (called *CNN_2*) is similar to *CNN_1* but it has another pair of convolutional and pooling layer.
+
+| Layers  | Type         | **Filters** | **Kernel size** | **Activation** |
+| ------- | ------------ | ----------- | --------------- | -------------- |
+| Layer 1 | Input        | -           | -               | -              |
+| Layer 2 | Conv2D       | 4           | 3, 3            | ReLU           |
+| Layer 3 | MaxPooling2D | -           | 2, 2            | -              |
+| Layer 4 | Conv2D       | 2           | 3, 3            | ReLU           |
+| Layer 5 | MaxPooling2D | -           | 2, 2            | -              |
+| Layer 6 | Flatten      | -           | -               | -              |
+| Layer 7 | Dense        | 64          |                 | ReLU           |
+| Layer 8 | Dense        | 10          |                 | Linear         |
+
+| Parameter        | Value                           |
+| ---------------- | ------------------------------- |
+| Weight estimator | adam                            |
+| Learning rate    | 0.001                           |
+| Loss function    | sparse categorical crossentropy |
+| Epochs           | 20                              |
+| Batch size       | 256                             |
+
+The third model (called *CNN_3*) is more complex than the previous one in its architecture. It has another pair of convolutional and pooling layer.
+
+| Layers   | Type         | **Filters** | **Kernel size** | **Activation** |
+| -------- | ------------ | ----------- | --------------- | -------------- |
+| Layer 1  | Input        | -           | -               | -              |
+| Layer 2  | Conv2D       | 8           | 3, 3            | ReLU           |
+| Layer 3  | MaxPooling   | -           | 2, 2            | -              |
+| Layer 4  | Conv2D       | 4           | 3, 3            | ReLU           |
+| Layer 5  | MaxPooling2D | -           | 2, 2            | -              |
+| Layer 6  | Conv2D       | 2           | 3, 3            | ReLU           |
+| Layer 7  | MaxPooling2D | -           | 2, 2            | -              |
+| Layer 8  | Flatten      | -           | -               | -              |
+| Layer 9  | Dense        | 64          |                 | ReLU           |
+| Layer 10 | Dense        | 10          |                 | Linear         |
+
+| Parameter        | Value                           |
+| ---------------- | ------------------------------- |
+| Weight estimator | adam                            |
+| Learning rate    | 0.001                           |
+| Loss function    | sparse categorical crossentropy |
+| Epochs           | 20                              |
+| Batch size       | 256                             |
+
+The last convolutional neural networks is called *CNN_4*. It has the same architecture that the *CNN_3* but its hyper-parameters are different. In particular, the number of epochs rises to 50 and the batch size goes down to 64.
+
+| Layers   | Type         | **Filters** | **Kernel size** | **Activation** |
+| -------- | ------------ | ----------- | --------------- | -------------- |
+| Layer 1  | Input        | -           | -               | -              |
+| Layer 2  | Conv2D       | 8           | 3, 3            | ReLU           |
+| Layer 3  | MaxPooling   | -           | 2, 2            | -              |
+| Layer 4  | Conv2D       | 4           | 3, 3            | ReLU           |
+| Layer 5  | MaxPooling2D | -           | 2, 2            | -              |
+| Layer 6  | Conv2D       | 2           | 3, 3            | ReLU           |
+| Layer 7  | MaxPooling2D | -           | 2, 2            | -              |
+| Layer 8  | Flatten      | -           | -               | -              |
+| Layer 9  | Dense        | 64          |                 | ReLU           |
+| Layer 10 | Dense        | 10          |                 | Linear         |
+
+| Parameter        | Value                           |
+| ---------------- | ------------------------------- |
+| Weight estimator | adam                            |
+| Learning rate    | 0.001                           |
+| Loss function    | sparse categorical crossentropy |
+| Epochs           | 50                              |
+| Batch size       | 64                              |
