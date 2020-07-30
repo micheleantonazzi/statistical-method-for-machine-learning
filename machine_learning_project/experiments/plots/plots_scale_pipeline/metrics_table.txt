@@ -1,16 +1,16 @@
 Table for scale_pipeline experiment, metric Accuracy
 | Models     | Training      | Test          |
 |:-----------|:--------------|:--------------|
-| Perceptron | mean = 0.9658 | mean = 0.9627 |
-|            | STD = 0.0017  | STD = 0.0042  |
-| FFNN       | mean = 0.999  | mean = 0.9983 |
-|            | STD = 0.0009  | STD = 0.0015  |
-| CNN_1      | mean = 0.9991 | mean = 0.9981 |
-|            | STD = 0.0007  | STD = 0.0011  |
-| CNN_2      | mean = 0.9822 | mean = 0.9811 |
-|            | STD = 0.012   | STD = 0.0095  |
-| CNN_3      | mean = 0.9137 | mean = 0.914  |
-|            | STD = 0.0299  | STD = 0.0286  |
-| CNN_4      | mean = 0.986  | mean = 0.9817 |
-|            | STD = 0.016   | STD = 0.019   |
+| Perceptron | mean = 0.9665 | mean = 0.9633 |
+|            | STD = 0.0016  | STD = 0.0035  |
+| FFNN       | mean = 0.9993 | mean = 0.9987 |
+|            | STD = 0.0008  | STD = 0.0009  |
+| CNN_1      | mean = 0.9982 | mean = 0.9969 |
+|            | STD = 0.0012  | STD = 0.0022  |
+| CNN_2      | mean = 0.9854 | mean = 0.9839 |
+|            | STD = 0.0074  | STD = 0.007   |
+| CNN_3      | mean = 0.8814 | mean = 0.8797 |
+|            | STD = 0.0239  | STD = 0.0252  |
+| CNN_4      | mean = 0.9627 | mean = 0.961  |
+|            | STD = 0.031   | STD = 0.0314  |
 
