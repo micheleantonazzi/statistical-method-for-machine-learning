@@ -65,7 +65,7 @@ After the preprocessing pipeline, the data are ready to pass to the learning mod
 - **loss function value**: the value of the model's loss function
 - **accuracy:** the ration between the correct predictions and the total number of samples.
 
-The final results are the mean and the standard deviation of the metrics obtained by the learning machines using each holdouts (both for training and validation phases). These results and the related conclusions are finally validated using the Wilcoxon signed-rank test with a p-value threshold of 0.01. It is a non-parametric statistical test to compare hypotheses made on repeated measures. In addiction, for each model, the trend of the metrics during the training phase are plotted to understand how the model learns during the succession of epochs. This is done only for the first holdout.
+The final results are the mean and the standard deviation of the metrics obtained by the learning machines using each holdouts (both for training and validation phases). These results and the related conclusions are finally validated using the Wilcoxon signed-rank test with a p-value threshold of 0.01. It is a non-parametric statistical test to compare hypotheses made on repeated measures. In addiction, for each model, the trend of the metrics during the training phase are plotted to understand how the model learns during the succession of epochs. The metrics are calculated both on the training and test sets of the first holdout.
 
 # Models
 
@@ -245,7 +245,7 @@ In this section the experimental results are reported. For each metric (loss fun
 
 ## Metrics during training phase
 
-The following graphs show the trend of the metric for each model during the training phase, calculated both with the training and test sets.
+The following graphs show the trend of the metric for each model during the training phase, calculated both on the training and test sets.
 
 **Perceptron**
 
