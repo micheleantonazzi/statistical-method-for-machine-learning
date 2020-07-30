@@ -14,3 +14,19 @@ Table for scale_pipeline experiment, metric Accuracy
 | CNN_4      | mean = 0.9627 | mean = 0.961  |
 |            | STD = 0.031   | STD = 0.0314  |
 
+Table for scale_pipeline experiment, metric Loss
+| Models     | Training      | Test          |
+|:-----------|:--------------|:--------------|
+| Perceptron | mean = 0.1529 | mean = 0.1584 |
+|            | STD = 0.0043  | STD = 0.0069  |
+| FFNN       | mean = 0.0095 | mean = 0.0109 |
+|            | STD = 0.0051  | STD = 0.0053  |
+| CNN_1      | mean = 0.0139 | mean = 0.0169 |
+|            | STD = 0.005   | STD = 0.0071  |
+| CNN_2      | mean = 0.0511 | mean = 0.0551 |
+|            | STD = 0.0214  | STD = 0.0206  |
+| CNN_3      | mean = 0.3454 | mean = 0.3487 |
+|            | STD = 0.0659  | STD = 0.0664  |
+| CNN_4      | mean = 0.1103 | mean = 0.117  |
+|            | STD = 0.0885  | STD = 0.09    |
+

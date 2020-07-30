@@ -81,7 +81,7 @@ class Results:
         file = open(path, 'w')
         models = results.model_name.unique()
         run_types = results.run_type.unique()
-        for metric in ['Accuracy']:
+        for metric in ['Accuracy', 'Loss']:
             temp = {run_type: [] for run_type in run_types}
             for model in models:
                 for run_type in run_types:
