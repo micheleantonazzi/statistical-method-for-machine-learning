@@ -65,7 +65,7 @@ After the preprocessing pipeline, the data are ready to pass to the learning mod
 - **loss function value**: the value of the model's loss function
 - **accuracy:** the ration between the correct predictions and the total number of samples.
 
-The final results are the mean and the standard deviation of the metrics obtained by the learning machines using each holdouts (both for training and validation phases). These results and the related conclusions are finally validated using the Wilcoxon signed-rank test with a p-value threshold of 0.01. It is a non-parametric statistical test to compare hypotheses made on repeated measures. In addiction, for each model, the trend of the metrics during the training phase are plotted to understand how the model learns during the succession of epochs. The metrics are calculated both on the training and test sets of the first holdout.
+The final results are the mean and the standard deviation of the metrics obtained by the learning machines using each holdouts (both for training and validation phases). These results and the related conclusions are finally validated using the Wilcoxon Signed-Rank test with a p-value threshold of 0.01. It is a non-parametric statistical test to compare hypotheses made on repeated measures. In addiction, for each model, the trend of the metrics during the training phase are plotted to understand how the model learns during the succession of epochs. The metrics are calculated both on the training and test sets of the first holdout.
 
 # Models
 
@@ -75,7 +75,7 @@ This section reports the architecture and the hyper-parameters of the neural net
 
 The feed-forward neural network is the first and simplest type of artificial neural network. The information moves in only one direction, forward, from the input nodes, through the hidden nodes, and to the output nodes. The layers of neurons are fully connected, in the sense that each neuron of a layer is connected to all neurons of the previous and next layers. The following tables specify the architecture and the hyper-parameters for each model. In particular, for each layer, the number of neurons (called *Units*) and the activation function are reported. Instead, for the hyper-parameters, the tables contain the weight estimator and its learning rate, the loss function, the number of epochs, and the batch size. 
 
-The first model (called *Perceptron*) is a classical neural network with the simplest architecture. It consists of a single layer which is also the output layer. Its purpose is to examine the network performance with the given dataset to build better models.
+The first model (called *Perceptron*) is a classical neural network with the simplest architecture: the single layer perceptron. It consists of a single layer which is also the output layer. Its purpose is to examine the network performance with the given dataset to build better models.
 
 | Layers  | Type    | Units | **Activation** |
 | ------- | ------- | ----- | -------------- |
@@ -271,5 +271,15 @@ The following graphs show the trend of the metric for each model during the trai
 
 ![Accuracy and loss function values for *CNN_4* model](images/cnn_4_training_accuracy.png)
 
+## Observations
+
+The following observation are statistically validated using the Wilcoxon test.
+
+*1) All neural networks used to execute the experiments performs well.* The models get high accuracy results and low loss function values. The performance are great even if the training phase short: the number of epochs are 20 for all model, with exception of *CNN_4* for which the number of epochs are 50. In particularly, the accuracy is always greater than 0.85 and the loss values smaller than 0.35.
+
+*2) The task simplicity require simple models.* In general, the models' performances degrade with an increase in complexity. The simplest model (the *Perceptron*) works better the most complicated one (*CNN_3*). The complexity of the latter require a longer training phase to increase its performances. The *CNN_4* indeed has the same architecture than *CNN_3*, but the number of epochs is higher. Despite this, the standard deviation grows. this means that the training phase  
+
 # Conclusions
+
+The image multi-classification task described in this project is relatively simple if it is addressed using deep learning models. The two main reasons concern the dataset characteristics and the task's simplicity. The dataset is composed by picture that depict only the fruit and vegetable to classify, without other objects that can add noise. In this way the models learn only the feature that characterize the target classes. In addiction, the images represent the subject on different in different position and light condition. This fact allows to avoid the image augmentation technique during the pre-processing phase. 
 
