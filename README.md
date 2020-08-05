@@ -273,13 +273,19 @@ The following graphs show the trend of the metric for each model during the trai
 
 ## Observations
 
-The following observation are statistically validated using the Wilcoxon test.
+The following observations are statistically validated using the Wilcoxon test.
 
-*1) All neural networks used to execute the experiments performs well.* The models get high accuracy results and low loss function values. The performance are great even if the training phase short: the number of epochs are 20 for all model, with exception of *CNN_4* for which the number of epochs are 50. In particularly, the accuracy is always greater than 0.85 and the loss values smaller than 0.35.
+*1) All neural networks used to execute the experiments performs well.* The models get high accuracy results and low loss function values. Their performances are great even if the training phase short: the number of epochs is 20 for all models, with the exception of *CNN_4* for which the number of epochs is 50. In particular, the accuracy is always greater than 0.85, and the loss values smaller than 0.35.
 
-*2) The task simplicity require simple models.* In general, the models' performances degrade with an increase in complexity. The simplest model (the *Perceptron*) works better the most complicated one (*CNN_3*). The complexity of the latter require a longer training phase to increase its performances. The *CNN_4* indeed has the same architecture than *CNN_3*, but the number of epochs is higher. Despite this, the standard deviation grows. this means that the training phase  
+*2) Task simplicity requires simple models.* In general, the models' performances degrade with an increase in complexity. The simplest model (the *Perceptron*) works better than the most complicated one (*CNN_3*). The complexity of the latter requires a longer training phase to increase its performance. The prove of this is *CNN_4*, which has the same architecture as *CNN_3*, but the number of epochs is higher and the batch size lower. In this way, the model can learn more and faster. Despite this, the standard deviation grows both for accuracy and loss function value: the network performance strongly depends on the holdout used for training the network.
+
+*3) The overfitting problem does not exist.* No model produces overfitting, even the most complex ones. This means that data is simply to learn and all of them are characterize from common patterns.
+
+*4) FFNN is the best model.* The Wilcoxon test confirms that *FFNN* is the network with higher performance in the validation phase, overcoming also *CNN_1*. Despite this is true both for accuracy and loss function value, it is more visible in the loss function graphic.
+
+*5) CNN_3 is the worst model.* This network has lower performance, both for the training and validation phase, because the reduced number of epochs does not allow the complex architecture of the network to learn enough.
 
 # Conclusions
 
-The image multi-classification task described in this project is relatively simple if it is addressed using deep learning models. The two main reasons concern the dataset characteristics and the task's simplicity. The dataset is composed by picture that depict only the fruit and vegetable to classify, without other objects that can add noise. In this way the models learn only the feature that characterize the target classes. In addiction, the images represent the subject on different in different position and light condition. This fact allows to avoid the image augmentation technique during the pre-processing phase. 
+The image multi-classification task described in this project is relatively simple if it is addressed using deep learning models. The two main reasons concern the dataset characteristics and the task's simplicity. The dataset is composed of pictures that depict only the fruit and vegetables to classify, without other objects that can add noise. In this way, the models learn only the feature that characterizes the target classes. In addition, the images represent the subject in different positions and light conditions. This fact allows to avoid the image augmentation technique during the pre-processing phase. Simple models work better because of the task's simplicity. Compared to more complex models, their performance is higher, they learn faster and the standard deviation is lower. The best one is a simple feed-forward neural network, which works better than all convolutional neural network tested in the experiments.
 
