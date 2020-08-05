@@ -1,0 +1,43 @@
+\documentclass[letterpaper,12pt]{article}
+\usepackage{tabularx} % extra features for tabular environment
+\usepackage{amsmath}  % improve math presentation
+\usepackage{graphicx} % takes care of graphic including machinery
+\usepackage[margin=1in,letterpaper]{geometry} % decreases margins
+\usepackage{cite} % takes care of citations
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage[final]{hyperref} % adds hyper links inside the generated pdf file
+\hypersetup{
+	colorlinks=true,       % false: boxed links; true: colored links
+	linkcolor=blue,        % color of internal links
+	citecolor=blue,        % color of links to bibliography
+	filecolor=magenta,     % color of file links
+	urlcolor=blue         
+}
+\usepackage{blindtext}
+\usepackage{caption}
+\captionsetup[table]{skip=10pt}
+%++++++++++++++++++++++++++++++++++++++++
+
+
+\begin{document}
+
+\title{Classify Images Using Deep Learning}
+\author{Michele Antonazzi}
+\date{\today}
+\maketitle
+
+\begin{abstract}
+In this work, we perform a multi-classification task over images using deep learning models. The aim is to evaluate the neural networks' performances in relation with their type, architecture and hyper-parameters. The models tested are FFNN (feed-forward neural network) and CNN (convolutional neural network). 
+\end{abstract}
+
+\input{introduction.tex}
+\newpage
+\input{experimental_setup.tex}
+\newpage
+\input{models.tex}
+
+\input{experimental_results.tex}
+
+
+\end{document}

@@ -1,0 +1,252 @@
+\section{Models}\label{header-n90}
+
+This section reports the architecture and hyper-parameters of the
+neural networks used to classy the images. In particular, the model
+tested are feed-forward neural networks (FFNNs) and convolutional neural
+networks (CNNs).
+
+\subsection{Feed-forward neural network}\label{header-n92}
+
+The feed-forward neural network is the first and simplest type of
+artificial neural network. The information moves in only one direction,
+forward, from the input nodes, through the hidden nodes, and to the
+output nodes. The layers of neurons are fully connected, in the sense
+that each neuron of a layer is connected to all neurons of the previous
+and next layers. The following tables specify the architecture and the
+hyper-parameters for each model. In particular, for each layer, the
+number of neurons (called \emph{Units}) and the activation function are
+reported. Instead, for the hyper-parameters, the tables contain the
+weight estimator and its learning rate, the loss function, the number of
+epochs, and the batch size.
+
+The first model (called \emph{Perceptron}) is a classical neural network
+with the simplest architecture: the single layer perceptron. It consists
+of a single layer which is also the output layer. Its purpose is to
+examine the network performance with the given dataset to build better
+models.
+
+\begin{longtable}[]{@{}llll@{}}
+	\toprule
+	\textbf{Layers} & \textbf{Type} & \textbf{Units} & \textbf{Activation}\tabularnewline
+	\midrule
+	\endhead
+	Layer 1 & Input & - & -\tabularnewline
+	Layer 2 & Flatten & - & -\tabularnewline
+	Layer 3 & Dense & 10 & Linear\tabularnewline
+	\bottomrule
+	\caption{\emph{Perceptron} architecture}
+\end{longtable}
+
+\begin{longtable}[]{@{}ll@{}}
+	\toprule
+	\textbf{Parameter} & \textbf{Value}\tabularnewline
+	\midrule
+	\endhead
+	Weight estimator & adam\tabularnewline
+	Learning rate & 0.001\tabularnewline
+	Loss function & sparse categorical crossentropy\tabularnewline
+	Epochs & 20\tabularnewline
+	Batch size & 256\tabularnewline
+	\bottomrule
+	\caption{\emph{Perceptron} hyper-parameters}
+\end{longtable}
+
+\newpage
+
+The second model is called \emph{FFNN}. It is similar to the first with
+more complex architecture. In particular, this network has two hidden
+layers.
+
+\begin{longtable}[]{@{}llll@{}}
+	\toprule
+	\textbf{Layers} & \textbf{Type} & \textbf{Units} & \textbf{Activation}\tabularnewline
+	\midrule
+	\endhead
+	Layer 1 & Input & - & -\tabularnewline
+	Layer 2 & Flatten & - & -\tabularnewline
+	Layer 3 & Dense & 64 & ReLU\tabularnewline
+	Layer 4 & Dense & 32 & ReLU\tabularnewline
+	Layer 5 & Dense & 10 & Linear\tabularnewline
+	\bottomrule
+	\caption{\emph{FFNN} architecture}
+\end{longtable}
+
+\begin{longtable}[]{@{}ll@{}}
+	\toprule
+	\textbf{Parameter} & \textbf{Value}\tabularnewline
+	\midrule
+	\endhead
+	Weight estimator & adam\tabularnewline
+	Learning rate & 0.001\tabularnewline
+	Loss function & sparse categorical crossentropy\tabularnewline
+	Epochs & 20\tabularnewline
+	Batch size & 256\tabularnewline
+	\bottomrule
+	\caption{\emph{FFNN} hyper-parameters}
+\end{longtable}
+
+\subsection{Convolutional neural networks}\label{header-n186}
+
+The next models are convolutional neural networks. This network at first
+learns what are the data features using convolutional layers and
+subsequently uses these features to label the data thanks to fully
+connected layers. CNNs are often used to analyze visual images thanks to
+their space invariant characteristics. The following tables specify the
+architecture and the hyper-parameters for each model. In particular, for
+each layer, the number of filters, the kernel size used by them, and the
+activation function are reported. The kernel size is expressed with one
+or two numbers based on the number of dimensions, while each number
+indicates the length of its dimension. Instead, the hyper-parameters are
+the same as those listed in the previous section.
+\newpage
+The first convolutional neural network is called \emph{CNN\_1}. Its
+architecture is really simple, with a single convolutional layer (after
+the input layer), a pooling layer (which implements the max operation),
+and a dense layer (before the output layer).
+
+\begin{longtable}[]{@{}lllll@{}}
+	\toprule
+	\textbf{Layers} & \textbf{Type} & \textbf{Filters} & \textbf{Kernel size} &
+	\textbf{Activation}\tabularnewline
+	\midrule
+	\endhead
+	Layer 1 & Input & - & - & -\tabularnewline
+	Layer 2 & Conv2D & 2 & 3, 3 & ReLU\tabularnewline
+	Layer 3 & MaxPooling2D & - & 2, 2 & -\tabularnewline
+	Layer 4 & Flatten & - & - & -\tabularnewline
+	Layer 5 & Dense & 64 & & ReLU\tabularnewline
+	Layer 6 & Dense & 10 & & Linear\tabularnewline
+	\bottomrule
+		\caption{\emph{CNN\_1} architecture}
+\end{longtable}
+
+\begin{longtable}[]{@{}ll@{}}
+	\toprule
+	\textbf{Parameter} & \textbf{Value}\tabularnewline
+	\midrule
+	\endhead
+	Weight estimator & adam\tabularnewline
+	Learning rate & 0.001\tabularnewline
+	Loss function & sparse categorical crossentropy\tabularnewline
+	Epochs & 20\tabularnewline
+	Batch size & 256\tabularnewline
+	\bottomrule
+	\caption{\emph{CNN\_1} hyper-parameters}
+\end{longtable}
+
+The second convolutional neural network (called \emph{CNN\_2}) is
+similar to \emph{CNN\_1} but it has another pair of convolutional and
+pooling layer.
+
+\begin{longtable}[]{@{}lllll@{}}
+	\toprule
+	\textbf{Layers} & Type & \textbf{Filters} & \textbf{Kernel size} &
+	\textbf{Activation}\tabularnewline
+	\midrule
+	\endhead
+	Layer 1 & Input & - & - & -\tabularnewline
+	Layer 2 & Conv2D & 4 & 3, 3 & ReLU\tabularnewline
+	Layer 3 & MaxPooling2D & - & 2, 2 & -\tabularnewline
+	Layer 4 & Conv2D & 2 & 3, 3 & ReLU\tabularnewline
+	Layer 5 & MaxPooling2D & - & 2, 2 & -\tabularnewline
+	Layer 6 & Flatten & - & - & -\tabularnewline
+	Layer 7 & Dense & 64 & & ReLU\tabularnewline
+	Layer 8 & Dense & 10 & & Linear\tabularnewline
+	\bottomrule
+		\caption{\emph{CNN\_2} architecture}
+\end{longtable}
+
+\newpage
+
+\begin{longtable}[]{@{}ll@{}}
+	\toprule
+	\textbf{Parameter} & \textbf{Value}\tabularnewline
+	\midrule
+	\endhead
+	Weight estimator & adam\tabularnewline
+	Learning rate & 0.001\tabularnewline
+	Loss function & sparse categorical crossentropy\tabularnewline
+	Epochs & 20\tabularnewline
+	Batch size & 256\tabularnewline
+	\bottomrule
+		\caption{\emph{CNN\_2} hyper-parameters}
+\end{longtable}
+
+The third model (called \emph{CNN\_3}) is more complex than the previous
+one in its architecture. It has another pair of convolutional and
+pooling layer.
+
+\begin{longtable}[]{@{}lllll@{}}
+	\toprule
+	\textbf{Layers} & \textbf{Type} & \textbf{Filters} & \textbf{Kernel size} &
+	\textbf{Activation}\tabularnewline
+	\midrule
+	\endhead
+	Layer 1 & Input & - & - & -\tabularnewline
+	Layer 2 & Conv2D & 8 & 3, 3 & ReLU\tabularnewline
+	Layer 3 & MaxPooling & - & 2, 2 & -\tabularnewline
+	Layer 4 & Conv2D & 4 & 3, 3 & ReLU\tabularnewline
+	Layer 5 & MaxPooling2D & - & 2, 2 & -\tabularnewline
+	Layer 6 & Conv2D & 2 & 3, 3 & ReLU\tabularnewline
+	Layer 7 & MaxPooling2D & - & 2, 2 & -\tabularnewline
+	Layer 8 & Flatten & - & - & -\tabularnewline
+	Layer 9 & Dense & 64 & & ReLU\tabularnewline
+	Layer 10 & Dense & 10 & & Linear\tabularnewline
+	\bottomrule
+		\caption{\emph{CNN\_3} architecture}
+\end{longtable}
+
+\begin{longtable}[]{@{}ll@{}}
+	\toprule
+	\textbf{Parameter} & \textbf{Value}\tabularnewline
+	\midrule
+	\endhead
+	Weight estimator & adam\tabularnewline
+	Learning rate & 0.001\tabularnewline
+	Loss function & sparse categorical crossentropy\tabularnewline
+	Epochs & 20\tabularnewline
+	Batch size & 256\tabularnewline
+	\bottomrule
+		\caption{\emph{CNN\_3} hyper-parameters}
+\end{longtable}
+
+\newpage
+
+The last convolutional neural networks is called \emph{CNN\_4}. It has
+the same architecture that the \emph{CNN\_3} but its hyper-parameters
+are different. In particular, the number of epochs rises to 50 and the
+batch size goes down to 64.
+
+\begin{longtable}[]{@{}lllll@{}}
+	\toprule
+	\textbf{Layers} & \textbf{Type} & \textbf{Filters} & \textbf{Kernel size} &
+	\textbf{Activation}\tabularnewline
+	\midrule
+	\endhead
+	Layer 1 & Input & - & - & -\tabularnewline
+	Layer 2 & Conv2D & 8 & 3, 3 & ReLU\tabularnewline
+	Layer 3 & MaxPooling & - & 2, 2 & -\tabularnewline
+	Layer 4 & Conv2D & 4 & 3, 3 & ReLU\tabularnewline
+	Layer 5 & MaxPooling2D & - & 2, 2 & -\tabularnewline
+	Layer 6 & Conv2D & 2 & 3, 3 & ReLU\tabularnewline
+	Layer 7 & MaxPooling2D & - & 2, 2 & -\tabularnewline
+	Layer 8 & Flatten & - & - & -\tabularnewline
+	Layer 9 & Dense & 64 & & ReLU\tabularnewline
+	Layer 10 & Dense & 10 & & Linear\tabularnewline
+	\bottomrule
+		\caption{\emph{CNN\_4} architecture}
+\end{longtable}
+
+\begin{longtable}[]{@{}ll@{}}
+	\toprule
+	\textbf{Parameter} & \textbf{Value}\tabularnewline
+	\midrule
+	\endhead
+	Weight estimator & adam\tabularnewline
+	Learning rate & 0.001\tabularnewline
+	Loss function & sparse categorical crossentropy\tabularnewline
+	Epochs & 50\tabularnewline
+	Batch size & 64\tabularnewline
+	\bottomrule
+		\caption{\emph{CNN\_4} hyper-parameters}
+\end{longtable}
