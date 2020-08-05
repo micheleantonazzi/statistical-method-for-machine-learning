@@ -13,7 +13,7 @@ forward, from the input nodes, through the hidden nodes, and to the
 output nodes. The layers of neurons are fully connected, in the sense
 that each neuron of a layer is connected to all neurons of the previous
 and next layers. The following tables specify the architecture and the
-hyper-parameters for each model. In particular, for each layer, the
+hyper-parameters for each FFNN tested in the experiments. In particular, for each layer, the
 number of neurons (called \emph{Units}) and the activation function are
 reported. Instead, for the hyper-parameters, the tables contain the
 weight estimator and its learning rate, the loss function, the number of
@@ -87,16 +87,14 @@ layers.
 
 \subsection{Convolutional neural networks}\label{header-n186}
 
-The next models are convolutional neural networks. This network at first
+The next models are convolutional neural networks. A CNN at first
 learns what are the data features using convolutional layers and
-subsequently uses these features to label the data thanks to fully
+subsequently uses these features to label the data using fully
 connected layers. CNNs are often used to analyze visual images thanks to
 their space invariant characteristics. The following tables specify the
-architecture and the hyper-parameters for each model. In particular, for
-each layer, the number of filters, the kernel size used by them, and the
-activation function are reported. The kernel size is expressed with one
-or two numbers based on the number of dimensions, while each number
-indicates the length of its dimension. Instead, the hyper-parameters are
+architecture and the hyper-parameters for each convolutional network tested in the experiments. In particular, for
+each layer, the number of filters, the kernel size, and the
+activation function are reported. The hyper-parameters are
 the same as those listed in the previous section.
 \newpage
 The first convolutional neural network is called \emph{CNN\_1}. Its
