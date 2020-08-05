@@ -4,7 +4,7 @@
 
 In this section the experimental results are reported. For each metric
 (loss function value and accuracy) there are a table and a plot to
-confront the learning machine performance. Each metric is calculated for
+confront the learning machine performances. Each metric is calculated for
 each model for each holdout and the final results are the mean and the
 standard deviation of the metrics obtained over the holdouts. The values
 are reported for both training and testing phases.
@@ -129,9 +129,9 @@ the training phase, calculated both on the training and test sets. In particular
 The following observations are statistically validated using the
 Wilcoxon test.
 
-\emph{1) All neural networks used to execute the experiments performs
+\emph{1) All neural networks used to execute the experiments perform
 well.} The models get high accuracy results and low loss function
-values. Their performances are great even if the training phase short:
+values. Their performances are great even if the training phase is short:
 the number of epochs is 20 for all models, with the exception of
 \emph{CNN\_4} for which the number of epochs is 50. In particular, the
 accuracy is always greater than 0.85, and the loss values smaller than
@@ -143,12 +143,11 @@ simplest model (the \emph{Perceptron}) works better than the most
 complicated one (\emph{CNN\_3}). The complexity of the latter requires a
 longer training phase to increase its performance. The prove of this is
 \emph{CNN\_4}, which has the same architecture as \emph{CNN\_3}, but the
-number of epochs is higher and the batch size lower. In this way, the
+number of epochs is higher and the batch size is lower. In this way, the
 model can learn more and faster. Despite this, the standard deviation
-grows both for accuracy and loss function value: the network performance
-strongly depends on the holdout used for training the network.
+grows both for accuracy and loss function value. This means that the performances of complex models strongly depends on the holdout used for training the network.
 
-\emph{3) The overfitting problem does not exist.} No model produces
+\emph{3) The overfitting problem does not occur with this dataset.} No model produces
 overfitting, even the most complex ones. This means that data is simply
 to learn and all of them are characterize from common patterns.
 
@@ -160,8 +159,8 @@ function graphic.
 
 \emph{5) CNN\_1 learn faster than FFNN\_1} Despite \emph{FFNN} works well than \emph{CNN\_1}, the latter learn faster especially during the initial phase of training. After this, \emph{CNN\_1} stabilizes near to the maximum and grows extremely slow. 
 
-\emph{6) CNN\_3 is the worst model.} This network has lower performance,
-both for the training and validation phase, because the reduced number
+\emph{6) CNN\_3 is the worst model.} This network has the lower performance,
+both for the training and validation phase. This happens because of the reduced number
 of epochs does not allow the complex architecture of the network to
 learn enough.
 
@@ -175,11 +174,9 @@ fruit and vegetables to classify, without other objects that can add
 noise. In this way, the models learn only the feature that characterizes
 the target classes. In addition, the images represent the subject in
 different positions and light conditions. This fact allows to avoid the
-image augmentation technique during the pre-processing phase. Simple
-models work better because of the task's simplicity. Compared to more
-complex models, their performance is higher, they learn faster and the
-standard deviation is lower. The best one is a simple feed-forward
-neural network, which works better than all convolutional neural network
+image augmentation technique during the preprocessing phase. Simple
+models work better because of the task's simplicity. Compared to more complex models, the simpler ones have higher performance and are more "confident", in the sense that the standard deviation is very slow, so they work well regardless of the holdouts. The best one is a simple feed-forward
+neural network, which performs better than all convolutional neural network
 tested in the experiments.
 
 \end{document}
