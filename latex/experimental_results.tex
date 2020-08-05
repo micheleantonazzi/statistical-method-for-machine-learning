@@ -72,13 +72,13 @@ CNN\_4 & mean = 0.9627 & mean = 0.961\tabularnewline
 \subsection{Metrics during training phase}\label{header-n613}
 
 The following graphs show the trend of the metric for each model during
-the training phase, calculated both on the training and test sets.
+the training phase, calculated both on the training and test sets. In particular, the blue line represents the metric related to the training set and the orange one refers to the test set. 
 
 \textbf{Perceptron}
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.68\linewidth]{../images/perceptron_training_accuracy.png}
+\includegraphics[width=0.66\linewidth]{../images/perceptron_training_accuracy.png}
 \caption{\emph{Perceptron} accuracy and loss function value during training phase}
 \end{figure}
 
@@ -86,7 +86,7 @@ the training phase, calculated both on the training and test sets.
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.68\linewidth]{../images/ffnn_training_accuracy.png}
+\includegraphics[width=0.66\linewidth]{../images/ffnn_training_accuracy.png}
 \caption{\emph{FFNN} accuracy and loss function value during training phase}
 \end{figure}
 
@@ -158,7 +158,9 @@ phase, overcoming also \emph{CNN\_1}. Despite this is true both for
 accuracy and loss function value, it is more visible in the loss
 function graphic.
 
-\emph{5) CNN\_3 is the worst model.} This network has lower performance,
+\emph{5) CNN\_1 learn faster than FFNN\_1} Despite \emph{FFNN} works well than \emph{CNN\_1}, the latter learn faster especially during the initial phase of training. After this, \emph{CNN\_1} stabilizes near to the maximum and grows extremely slow. 
+
+\emph{6) CNN\_3 is the worst model.} This network has lower performance,
 both for the training and validation phase, because the reduced number
 of epochs does not allow the complex architecture of the network to
 learn enough.
