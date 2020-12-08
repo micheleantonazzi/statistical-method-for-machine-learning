@@ -4,6 +4,7 @@ from machine_learning_project.data_manipulation.data_visualization import DataVi
 from machine_learning_project.data_manipulation.preprocessing_pipelines import SCALE_PIPELINE
 from machine_learning_project.experiments.experiments_executor import ExperimentsExecutor
 
+os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 from machine_learning_project.data_manipulation.data_retrieval import DataRetrieval
